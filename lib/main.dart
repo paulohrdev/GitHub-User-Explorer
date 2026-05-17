@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:github_user_explorer/config/injection_container.dart';
 import 'package:github_user_explorer/routing/router.dart';
 import 'package:github_user_explorer/ui/core/themes/theme.dart';
+import 'package:signals_core/signals_core.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  SignalsObserver.instance = null;
+  await dotenv.load();
+  setupDependencies();
   runApp(const GithubUserExplorerApp());
 }
 
