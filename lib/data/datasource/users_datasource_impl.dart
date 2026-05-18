@@ -10,10 +10,10 @@ class UsersDatasourceImpl implements UsersDatasource {
   final Dio _dio;
 
   @override
-  Future<List<UserModel>> searchUsers(String query) async {
+  Future<List<UserModel>> searchUsers(String query, {required int page}) async {
     final response = await _dio.get<Map<String, dynamic>>(
       '/search/users',
-      queryParameters: {'q': query, 'per_page': 20, 'page': 1},
+      queryParameters: {'q': query, 'per_page': 20, 'page': page},
     );
 
     final items = response.data!['items'] as List<dynamic>;

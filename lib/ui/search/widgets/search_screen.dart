@@ -15,11 +15,26 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   final _controller = TextEditingController();
+  final _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
 
   @override
   void dispose() {
+    _scrollController.dispose();
     _controller.dispose();
     super.dispose();
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
+      widget.viewModel.loadMore();
+    }
   }
 
   void _onClear() {
@@ -69,9 +84,19 @@ class _SearchScreenState extends State<SearchScreen> {
                     return const Center(child: Text('Nenhum usuário encontrado'));
                   }
 
+                  final isLoadingMore = widget.viewModel.isLoadingMore.value;
+
                   return ListView.builder(
-                    itemCount: users.length,
+                    controller: _scrollController,
+                    itemCount: users.length + (isLoadingMore ? 1 : 0),
                     itemBuilder: (context, index) {
+                      if (index == users.length) {
+                        return const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 16),
+                          child: Center(child: CircularProgressIndicator()),
+                        );
+                      }
+
                       final user = users[index];
                       return ListTile(
                         leading: CircleAvatar(

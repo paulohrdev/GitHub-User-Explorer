@@ -12,9 +12,9 @@ class UsersRepositoryImpl implements UsersRepository {
   final UsersDatasource _datasource;
 
   @override
-  Future<Either<String, List<UserModel>>> searchUsers(String query) async {
+  Future<Either<String, List<UserModel>>> searchUsers(String query, {required int page}) async {
     try {
-      final users = await _datasource.searchUsers(query);
+      final users = await _datasource.searchUsers(query, page: page);
       return Right(users);
     } on DioException catch (e) {
       final errorMessage = e.response?.data?['message'] ?? 'An error occurred.';
