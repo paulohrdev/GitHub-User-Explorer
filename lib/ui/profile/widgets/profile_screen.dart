@@ -151,7 +151,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 final repos = widget.viewModel.repos.value;
 
                 if (repos.isEmpty) {
-                  return const SliverToBoxAdapter();
+                  return const SliverToBoxAdapter(
+                    child: Center(
+                      child: Text('No repository created.'),
+                    )
+                  );
                 }
 
                 return SliverList(

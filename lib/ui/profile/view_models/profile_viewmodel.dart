@@ -1,12 +1,18 @@
+import 'package:github_user_explorer/data/repositories/history_repository.dart';
 import 'package:github_user_explorer/data/repositories/users_repository.dart';
+import 'package:github_user_explorer/domain/model/history_entry.dart';
 import 'package:github_user_explorer/domain/model/profile_model.dart';
 import 'package:github_user_explorer/domain/model/repository_model.dart';
 import 'package:signals_flutter/signals_flutter.dart';
 
 class ProfileViewModel {
-  ProfileViewModel({required this.usersRepository});
+  ProfileViewModel({
+    required this.usersRepository,
+    required this.historyRepository,
+  });
 
   final UsersRepository usersRepository;
+  final HistoryRepository historyRepository;
 
   final isLoading = signal(true);
   final errorMessage = signal<String?>(null);
@@ -26,6 +32,13 @@ class ProfileViewModel {
       (error) => errorMessage.value = error,
       (data) {
         profile.value = data;
+        historyRepository.save(HistoryEntry(
+          id: data.id,
+          login: data.login,
+          avatarUrl: data.avatarUrl,
+          htmlUrl: data.htmlUrl,
+          visitedAt: DateTime.now(),
+        ));
         loadRepos();
       },
     );

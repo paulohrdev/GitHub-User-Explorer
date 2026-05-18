@@ -17,15 +17,18 @@ class TabsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          child,
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: _buildBottomNavigationBar(context),
-          ),
-        ],
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        body: Stack(
+          children: [
+            child,
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: _buildBottomNavigationBar(context),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -1,16 +1,24 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_it/get_it.dart';
+import 'package:github_user_explorer/data/datasource/history_datasource.dart';
+import 'package:github_user_explorer/data/datasource/history_datasource_impl.dart';
 import 'package:github_user_explorer/data/datasource/users_datasource.dart';
 import 'package:github_user_explorer/data/datasource/users_datasource_impl.dart';
+import 'package:github_user_explorer/data/repositories/history_repository.dart';
+import 'package:github_user_explorer/data/repositories/history_repository_impl.dart';
 import 'package:github_user_explorer/data/repositories/users_repository.dart';
 import 'package:github_user_explorer/data/repositories/users_repository_impl.dart';
+import 'package:github_user_explorer/data/services/hive_service.dart';
+import 'package:github_user_explorer/domain/model/history_entry.dart';
+import 'package:github_user_explorer/ui/history/view_models/history_viewmodel.dart';
 import 'package:github_user_explorer/ui/profile/view_models/profile_viewmodel.dart';
 import 'package:github_user_explorer/ui/search/view_models/search_viewmodel.dart';
+import 'package:hive_ce/hive.dart';
 
 final sl = GetIt.instance;
 
-void setupDependencies() {
+Future<void> setupDependencies() async {
   final dio = Dio(
     BaseOptions(
       baseUrl: dotenv.env['API_URL']!,
@@ -21,6 +29,14 @@ void setupDependencies() {
   );
 
   sl.registerSingleton<Dio>(dio);
+
+  sl.registerSingleton<Box<HistoryEntry>>(HiveService.historyBox);
+  sl.registerSingleton<HistoryDatasource>(
+    HistoryDatasourceImpl(sl<Box<HistoryEntry>>()),
+  );
+  sl.registerSingleton<HistoryRepository>(
+    HistoryRepositoryImpl(sl<HistoryDatasource>()),
+  );
 
   sl.registerSingleton<UsersDatasource>(
     UsersDatasourceImpl(sl<Dio>()),
@@ -35,6 +51,13 @@ void setupDependencies() {
   );
 
   sl.registerSingleton<ProfileViewModel>(
-    ProfileViewModel(usersRepository: sl<UsersRepository>()),
+    ProfileViewModel(
+      usersRepository: sl<UsersRepository>(),
+      historyRepository: sl<HistoryRepository>(),
+    ),
+  );
+
+  sl.registerSingleton<HistoryViewModel>(
+    HistoryViewModel(historyRepository: sl<HistoryRepository>()),
   );
 }

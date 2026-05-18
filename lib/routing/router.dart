@@ -35,7 +35,7 @@ abstract final class AppRouter {
               GoRoute(
                 path: Routes.historyRelative,
                 builder: (context, state) {
-                  return HistoryScreen(viewModel: HistoryViewModel());
+                  return HistoryScreen(viewModel: sl<HistoryViewModel>());
                 }
               ),
             ]
