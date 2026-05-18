@@ -30,7 +30,7 @@ class SearchViewModel {
   }
 
   Future<void> _fetch() async {
-    if (query.trim().isEmpty) {
+    if (query.value.trim().isEmpty) {
       users.value = [];
       errorMessage.value = null;
       return;
@@ -39,7 +39,7 @@ class SearchViewModel {
     isLoading.value = true;
     errorMessage.value = null;
 
-    final result = await usersRepository.searchUsers(query.trim());
+    final result = await usersRepository.searchUsers(query.value.trim());
 
     result.fold(
       (error) => errorMessage.value = error,
