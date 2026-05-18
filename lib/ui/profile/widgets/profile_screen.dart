@@ -2,148 +2,175 @@ import 'package:flutter/material.dart';
 import 'package:github_user_explorer/routing/routes.dart';
 import 'package:github_user_explorer/ui/core/themes/colors.dart';
 import 'package:github_user_explorer/ui/profile/view_models/profile_viewmodel.dart';
+import 'package:github_user_explorer/ui/profile/widgets/card_repository.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart' show toBeginningOfSentenceCase;
+import 'package:url_launcher/url_launcher.dart';
+import 'package:signals_flutter/signals_flutter.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   final ProfileViewModel viewModel;
+  final int id;
 
-  const ProfileScreen({super.key, required this.viewModel});
+  const ProfileScreen({super.key, required this.viewModel, required this.id});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  @override
+  void initState() {
+    super.initState();
+    widget.viewModel.loadUser(widget.id);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 16),
-                padding: const EdgeInsets.only(bottom: 8),
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(width: .1, color: AppColors.onSurfaceVariant)
-                  )
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: 96,
-                      height: 96,
-                      decoration: BoxDecoration(
-                        color: Colors.red,
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        border: Border.all(width: .5, color: AppColors.onSurfaceVariant)
-                      ),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsetsGeometry.symmetric(horizontal: 16),
+          child: CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(
+                child: Watch((context) {
+                  if (widget.viewModel.isLoading.value) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+
+                  if (widget.viewModel.errorMessage.value != null) {
+                    return Center(child: Text(widget.viewModel.errorMessage.value!));
+                  }
+
+                  return Container(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(width: .1, color: AppColors.onSurfaceVariant)
+                      )
                     ),
-                    const SizedBox(height: 16),
-                    Text('Eleanor', style: Theme.of(context).textTheme.headlineLarge),
-                    Text('@elvance_dev', style: Theme.of(context).textTheme.bodySmall),
-                    const SizedBox(height: 16),
-                    Text('Senior Systems Engineer. Passionate about Rust, distributed systems, and minimal UI. Building the next generation of terminal tools.', textAlign: TextAlign.center, style: Theme.of(context).textTheme.bodyMedium),
-                    const SizedBox(height: 16),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Expanded(
-                          child: Column(
-                            children: [
-                              Text('1,402', style: Theme.of(context).textTheme.bodyMedium),
-                              Text('Followers', style: Theme.of(context).textTheme.labelSmall)
-                            ],
+                        Container(
+                          width: 96,
+                          height: 96,
+                          decoration: BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                            border: Border.all(width: .5, color: AppColors.onSurfaceVariant),
+                            image: DecorationImage(image: NetworkImage(widget.viewModel.profile.value!.avatarUrl))
                           ),
                         ),
-                        Expanded(
-                          child: Column(
-                            children: [
-                              Text('48', style: Theme.of(context).textTheme.bodyMedium),
-                              Text('Following', style: Theme.of(context).textTheme.labelSmall)
-                            ],
-                          ),
-                        ),
-                        Expanded(
-                          child: Column(
-                            children: [
-                              Text('112', style: Theme.of(context).textTheme.bodyMedium),
-                              Text('Repos', style: Theme.of(context).textTheme.labelSmall)
-                            ],
-                          ),
+                        const SizedBox(height: 16),
+                        if (widget.viewModel.profile.value?.name != null)
+                          Text(widget.viewModel.profile.value!.name!, style: Theme.of(context).textTheme.headlineLarge),
+                        Text(widget.viewModel.profile.value!.login, style: Theme.of(context).textTheme.bodySmall),
+                        const SizedBox(height: 16),
+                        if (widget.viewModel.profile.value?.bio != null) ...[
+                          Text(widget.viewModel.profile.value!.bio!, textAlign: TextAlign.center, style: Theme.of(context).textTheme.bodyMedium),
+                          const SizedBox(height: 16),
+                        ],
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: Column(
+                                children: [
+                                  Text(widget.viewModel.profile.value!.followers.toString(), style: Theme.of(context).textTheme.bodyMedium),
+                                  Text('Followers', style: Theme.of(context).textTheme.labelSmall)
+                                ],
+                              ),
+                            ),
+                            Expanded(
+                              child: Column(
+                                children: [
+                                  Text(widget.viewModel.profile.value!.following.toString(), style: Theme.of(context).textTheme.bodyMedium),
+                                  Text('Following', style: Theme.of(context).textTheme.labelSmall)
+                                ],
+                              ),
+                            ),
+                            Expanded(
+                              child: Column(
+                                children: [
+                                  Text(widget.viewModel.profile.value!.repos.toString(), style: Theme.of(context).textTheme.bodyMedium),
+                                  Text('Repos', style: Theme.of(context).textTheme.labelSmall)
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
+                  );
+                }),
+              ),
+              const SliverToBoxAdapter(child: SizedBox(height: 16)),
+              SliverToBoxAdapter(
+                child: SizedBox(
+                  width: double.infinity,
+                  child: FilledButton(
+                    onPressed: () async {
+                      if (widget.viewModel.profile.value?.htmlUrl == null) return;
+                      final Uri url = Uri.parse(widget.viewModel.profile.value!.htmlUrl);
+                      await launchUrl(url,mode: LaunchMode.externalApplication);
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.open_in_new),
+                        const SizedBox(width: 4),
+                        Text('Open on Github')
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              const SliverToBoxAdapter(child: SizedBox(height: 32)),
+              SliverToBoxAdapter(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Repositories', style: Theme.of(context).textTheme.titleMedium),
+                    Text('sort'),
                   ],
                 ),
               ),
-              const SizedBox(height: 16),
-              SizedBox(
-                width: double.infinity,
-                child: FilledButton(
-                  onPressed: () {},
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.open_in_new),
-                      const SizedBox(width: 4),
-                      Text('Open on Github')
-                    ],
+              const SliverToBoxAdapter(child: SizedBox(height: 16)),
+              Watch((context) {
+                if (widget.viewModel.isLoadingRepos.value) {
+                  return const SliverFillRemaining(
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                }
+
+                final repos = widget.viewModel.repos.value;
+
+                if (repos.isEmpty) {
+                  return const SliverToBoxAdapter();
+                }
+
+                return SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      final repo = repos[index];
+                      return CardRepository(
+                        title: repo.name,
+                        mode: repo.visibility,
+                        stars: repo.stars,
+                        update: repo.updatedAt,
+                        description: repo.descriptions,
+                        lang: repo.language,
+                        onTap: () => context.push(Routes.repository),
+                      );
+                    },
+                    childCount: repos.length,
                   ),
-                ),
-              ),
-              const SizedBox(height: 32),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('Repositories', style: Theme.of(context).textTheme.titleMedium),
-                  Text('sort'),
-                ],
-              ),
-              const SizedBox(height: 16),
-              GestureDetector(
-                onTap: () => context.push(Routes.repository),
-                child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: AppColors.surfaceContainer,
-                    border: Border.all(width: 1, color: AppColors.outlineVariant)
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(Icons.book, size: 14),
-                          const SizedBox(width: 4),
-                          Text('term-ui-rs', style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppColors.primary),),
-                          Spacer(),
-                          Chip(
-                            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                            label: Text('Public', style: Theme.of(context).textTheme.labelSmall,),
-                            elevation: 1,
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 16),
-                      Text('A highly optimized, zero-allocation terminal UI rendering engine written entirely in Rust My personal dotfiles for Arch Linux. Focus on Neovim, Alacritty, and Tmux configurations for', maxLines: 2, overflow: TextOverflow.ellipsis),
-                      const SizedBox(height: 16),
-                      Row(
-                        children: [
-                          Text(toBeginningOfSentenceCase('RUST'.toLowerCase())),
-                          const SizedBox(width: 16),
-                          Icon(Icons.star_border, size: 16),
-                          const SizedBox(width: 2),
-                          Text('892'),
-                          Spacer(),
-                          Text('Updated 2d ago'),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              )
+                );
+              }),
             ],
           ),
         ),

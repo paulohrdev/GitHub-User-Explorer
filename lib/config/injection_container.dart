@@ -5,6 +5,7 @@ import 'package:github_user_explorer/data/datasource/users_datasource.dart';
 import 'package:github_user_explorer/data/datasource/users_datasource_impl.dart';
 import 'package:github_user_explorer/data/repositories/users_repository.dart';
 import 'package:github_user_explorer/data/repositories/users_repository_impl.dart';
+import 'package:github_user_explorer/ui/profile/view_models/profile_viewmodel.dart';
 import 'package:github_user_explorer/ui/search/view_models/search_viewmodel.dart';
 
 final sl = GetIt.instance;
@@ -31,5 +32,9 @@ void setupDependencies() {
 
   sl.registerSingleton<SearchViewModel>(
     SearchViewModel(usersRepository: sl<UsersRepository>()),
+  );
+
+  sl.registerSingleton<ProfileViewModel>(
+    ProfileViewModel(usersRepository: sl<UsersRepository>()),
   );
 }

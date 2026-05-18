@@ -4,12 +4,14 @@ import 'package:github_user_explorer/config/injection_container.dart';
 import 'package:github_user_explorer/routing/router.dart';
 import 'package:github_user_explorer/ui/core/themes/theme.dart';
 import 'package:signals_core/signals_core.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SignalsObserver.instance = null;
   await dotenv.load();
   setupDependencies();
+  await initializeDateFormatting('pt_BR', null);
   runApp(const GithubUserExplorerApp());
 }
 

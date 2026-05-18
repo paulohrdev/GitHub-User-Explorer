@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:github_user_explorer/config/injection_container.dart';
+import 'package:github_user_explorer/data/repositories/users_repository.dart';
 import 'package:github_user_explorer/routing/routes.dart';
 import 'package:github_user_explorer/ui/history/view_models/history_viewmodel.dart';
 import 'package:github_user_explorer/ui/history/widgets/history_screen.dart';
@@ -42,13 +43,14 @@ abstract final class AppRouter {
           GoRoute(
             path: Routes.profileRelative,
             builder: (context, state) {
-              return ProfileScreen(viewModel: ProfileViewModel());
+              return ProfileScreen(viewModel: sl<ProfileViewModel>(), id: 0);
             },
             routes: [
               GoRoute(
                 path: ':id',
                 builder: (context, state) {
-                  return ProfileScreen(viewModel: ProfileViewModel());
+                  final id = int.parse(state.pathParameters['id']!);
+                  return ProfileScreen(viewModel: sl<ProfileViewModel>(), id: id);
                 }
               ),
             ]
