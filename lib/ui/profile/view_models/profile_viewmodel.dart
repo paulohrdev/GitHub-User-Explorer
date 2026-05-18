@@ -5,6 +5,8 @@ import 'package:github_user_explorer/domain/model/profile_model.dart';
 import 'package:github_user_explorer/domain/model/repository_model.dart';
 import 'package:signals_flutter/signals_flutter.dart';
 
+enum RepoSort { newest, oldest }
+
 class ProfileViewModel {
   ProfileViewModel({
     required this.usersRepository,
@@ -21,6 +23,13 @@ class ProfileViewModel {
   final isLoadingRepos = signal(true);
   final errorMessageRepos = signal<String?>(null);
   final repos = signal<List<RepositoryModel>>([]);
+  final repoSort = signal(RepoSort.newest);
+
+  void toggleSort() {
+    if (isLoadingRepos.value) return;
+    repoSort.value = repoSort.value == RepoSort.newest ? RepoSort.oldest : RepoSort.newest;
+    loadRepos();
+  }
 
   Future<void> loadUser(int id) async {
     isLoading.value = true;
@@ -50,7 +59,8 @@ class ProfileViewModel {
     isLoadingRepos.value = true;
     errorMessageRepos.value = null;
 
-    final result = await usersRepository.getRepos(profile.value!.login);
+    final direction = repoSort.value == RepoSort.newest ? 'desc' : 'asc';
+    final result = await usersRepository.getRepos(profile.value!.login, direction: direction);
 
     result.fold(
       (error) => errorMessageRepos.value = error,

@@ -8,5 +8,5 @@ abstract interface class UsersRepository {
 
   Future<Either<String, ProfileModel>> getUser(int id);
 
-  Future<Either<String, List<RepositoryModel>>> getRepos(String login);
+  Future<Either<String, List<RepositoryModel>>> getRepos(String login, {required String direction});
 }

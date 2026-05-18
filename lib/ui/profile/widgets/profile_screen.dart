@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:github_user_explorer/routing/routes.dart';
 import 'package:github_user_explorer/ui/core/themes/colors.dart';
-import 'package:github_user_explorer/ui/profile/view_models/profile_viewmodel.dart';
+import 'package:github_user_explorer/ui/profile/view_models/profile_viewmodel.dart' show ProfileViewModel, RepoSort;
 import 'package:github_user_explorer/ui/profile/widgets/card_repository.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -134,7 +134,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text('Repositories', style: Theme.of(context).textTheme.titleMedium),
-                    Text('sort'),
+                    Watch((context) => TextButton.icon(
+                      onPressed: widget.viewModel.toggleSort,
+                      icon: Icon(
+                        widget.viewModel.repoSort.value == RepoSort.newest
+                            ? Icons.arrow_downward
+                            : Icons.arrow_upward,
+                        size: 14,
+                      ),
+                      label: Text(
+                        widget.viewModel.repoSort.value == RepoSort.newest
+                            ? 'Most recent'
+                            : 'Older',
+                      ),
+                    )),
                   ],
                 ),
               ),

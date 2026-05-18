@@ -29,14 +29,12 @@ class UsersDatasourceImpl implements UsersDatasource {
   }
 
   @override
-  Future<List<RepositoryModel>> getRepos(String login) async {
+  Future<List<RepositoryModel>> getRepos(String login, {required String direction}) async {
     final response = await _dio.get<List<dynamic>>(
       '/users/$login/repos',
       queryParameters: {
-        'sort': 'updated',
-        'direction': 'asc',
-        'per_page': 20,
-        'page': 1,
+        'sort': 'pushed',
+        'direction': direction,
       },
     );
 

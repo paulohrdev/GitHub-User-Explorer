@@ -48,7 +48,7 @@ The `.env` file (not committed) is bundled as a Flutter asset and must define `A
 <!-- gitnexus:start -->
 # GitNexus — Code Intelligence
 
-This project is indexed by GitNexus as **github_user_explorer** (764 symbols, 1202 relationships, 13 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
+This project is indexed by GitNexus as **github_user_explorer** (846 symbols, 1390 relationships, 15 execution flows). Use the GitNexus MCP tools to understand code, assess impact, and navigate safely.
 
 > If any GitNexus tool warns the index is stale, run `npx gitnexus analyze` in terminal first.
 

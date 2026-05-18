@@ -7,5 +7,5 @@ abstract interface class UsersDatasource{
 
   Future<ProfileModel> getUser(int id);
 
-  Future<List<RepositoryModel>> getRepos(String login);
+  Future<List<RepositoryModel>> getRepos(String login, {required String direction});
 }

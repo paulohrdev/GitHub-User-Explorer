@@ -38,9 +38,9 @@ class UsersRepositoryImpl implements UsersRepository {
   }
 
   @override
-  Future<Either<String, List<RepositoryModel>>> getRepos(String login) async {
+  Future<Either<String, List<RepositoryModel>>> getRepos(String login, {required String direction}) async {
     try {
-      final repos = await _datasource.getRepos(login);
+      final repos = await _datasource.getRepos(login, direction: direction);
       return Right(repos);
     } on DioException catch (e) {
       final errorMessage = e.response?.data?['message'] ?? 'An error occurred.';
