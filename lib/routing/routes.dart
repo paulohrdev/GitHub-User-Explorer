@@ -6,7 +6,8 @@ abstract final class Routes {
   static const historyRelative = 'history';
   static const profile = '/$profileRelative';
   static const profileRelative = 'profile';
+  static String profileWithId(int id) => '$profile/$id';
   static const repository = '/$repositoryRelative';
   static const repositoryRelative = 'repository';
-  static String profileWithId(int id) => '$profile/$id';
+  static String repositoryWithId(int id) => '$repository/$id';
 }

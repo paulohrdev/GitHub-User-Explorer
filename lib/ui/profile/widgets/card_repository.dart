@@ -44,8 +44,7 @@ class CardRepository extends StatelessWidget {
                 Spacer(),
                 Chip(
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  label: Text(mode, style: Theme.of(context).textTheme.labelSmall,),
-                  elevation: 1,
+                  label: Text(mode, style: Theme.of(context).textTheme.labelSmall),
                 ),
               ],
             ),

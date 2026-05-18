@@ -27,6 +27,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsetsGeometry.symmetric(horizontal: 16),
@@ -157,14 +158,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {
                       final repo = repos[index];
-                      return CardRepository(
-                        title: repo.name,
-                        mode: repo.visibility,
-                        stars: repo.stars,
-                        update: repo.updatedAt,
-                        description: repo.descriptions,
-                        lang: repo.language,
-                        onTap: () => context.push(Routes.repository),
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 8),
+                        child: CardRepository(
+                          title: repo.name,
+                          mode: repo.visibility,
+                          stars: repo.stars,
+                          update: repo.updatedAt,
+                          description: repo.descriptions,
+                          lang: repo.language,
+                          onTap: () => context.push(Routes.repository, extra: repo),
+                        ),
                       );
                     },
                     childCount: repos.length,

@@ -1,11 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:github_user_explorer/config/injection_container.dart';
-import 'package:github_user_explorer/data/repositories/users_repository.dart';
 import 'package:github_user_explorer/routing/routes.dart';
 import 'package:github_user_explorer/ui/history/view_models/history_viewmodel.dart';
 import 'package:github_user_explorer/ui/history/widgets/history_screen.dart';
 import 'package:github_user_explorer/ui/profile/view_models/profile_viewmodel.dart';
 import 'package:github_user_explorer/ui/profile/widgets/profile_screen.dart';
+import 'package:github_user_explorer/domain/model/repository_model.dart';
 import 'package:github_user_explorer/ui/repository/view_models/repository_viewmodel.dart';
 import 'package:github_user_explorer/ui/repository/widgets/repository_screen.dart';
 import 'package:github_user_explorer/ui/search/view_models/search_viewmodel.dart';
@@ -58,7 +58,8 @@ abstract final class AppRouter {
           GoRoute(
             path: Routes.repositoryRelative,
             builder: (context, state) {
-              return RepositoryScreen(viewModel: RepositoryViewModel());
+              final repo = state.extra as RepositoryModel;
+              return RepositoryScreen(viewModel: RepositoryViewModel(), repository: repo);
             },
           ),
         ]
