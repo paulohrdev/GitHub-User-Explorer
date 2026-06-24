@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:github_user_explorer/data/repositories/users_repository.dart';
+import 'package:github_user_explorer/domain/repositories/users_repository.dart';
 import 'package:github_user_explorer/domain/model/user_model.dart';
 import 'package:signals_flutter/signals_flutter.dart';
 

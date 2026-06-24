@@ -23,7 +23,7 @@ class GithubUserExplorerApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'DynBook',
+      title: 'GH Explorer',
       themeMode: ThemeMode.dark,
       darkTheme: AppTheme.darkTheme,
       theme: AppTheme.darkTheme, // @TODO light theme

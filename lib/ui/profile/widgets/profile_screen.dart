@@ -182,7 +182,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           mode: repo.visibility,
                           stars: repo.stars,
                           update: repo.updatedAt,
-                          description: repo.descriptions,
+                          description: repo.description,
                           lang: repo.language,
                           onTap: () => context.push(Routes.repository, extra: repo),
                         ),

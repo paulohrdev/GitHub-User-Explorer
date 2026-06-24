@@ -16,7 +16,7 @@ _RepositoryModel _$RepositoryModelFromJson(Map<String, dynamic> json) =>
       updatedAt: DateTime.parse(json['pushed_at'] as String),
       createdAt: DateTime.parse(json['created_at'] as String),
       stars: (json['stargazers_count'] as num).toInt(),
-      descriptions: json['descriptions'] as String?,
+      description: json['description'] as String?,
       language: json['language'] as String?,
     );
 
@@ -30,6 +30,6 @@ Map<String, dynamic> _$RepositoryModelToJson(_RepositoryModel instance) =>
       'pushed_at': instance.updatedAt.toIso8601String(),
       'created_at': instance.createdAt.toIso8601String(),
       'stargazers_count': instance.stars,
-      'descriptions': instance.descriptions,
+      'description': instance.description,
       'language': instance.language,
     };

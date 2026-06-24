@@ -37,9 +37,9 @@ class RepositoryScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              if (repository.descriptions != null) ...[
+              if (repository.description != null) ...[
                 const SizedBox(height: 8),
-                Text(repository.descriptions!, style: Theme.of(context).textTheme.bodySmall),
+                Text(repository.description!, style: Theme.of(context).textTheme.bodySmall),
               ],
               const SizedBox(height: 24),
               Row(

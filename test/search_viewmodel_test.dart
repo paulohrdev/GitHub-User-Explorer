@@ -1,6 +1,6 @@
 import 'package:either_dart/either.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:github_user_explorer/data/repositories/users_repository.dart';
+import 'package:github_user_explorer/domain/repositories/users_repository.dart';
 import 'package:github_user_explorer/domain/model/user_model.dart';
 import 'package:github_user_explorer/ui/search/view_models/search_viewmodel.dart';
 import 'package:mocktail/mocktail.dart';

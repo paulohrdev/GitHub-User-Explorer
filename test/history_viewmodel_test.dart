@@ -1,6 +1,6 @@
 import 'package:either_dart/either.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:github_user_explorer/data/repositories/history_repository.dart';
+import 'package:github_user_explorer/domain/repositories/history_repository.dart';
 import 'package:github_user_explorer/domain/model/history_entry.dart';
 import 'package:github_user_explorer/ui/history/view_models/history_viewmodel.dart';
 import 'package:mocktail/mocktail.dart';

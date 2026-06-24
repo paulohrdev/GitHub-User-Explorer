@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:either_dart/either.dart';
 import 'package:github_user_explorer/data/datasource/users_datasource.dart';
-import 'package:github_user_explorer/data/repositories/users_repository.dart';
+import 'package:github_user_explorer/domain/repositories/users_repository.dart';
 import 'package:github_user_explorer/domain/model/profile_model.dart';
 import 'package:github_user_explorer/domain/model/repository_model.dart';
 import 'package:github_user_explorer/domain/model/user_model.dart';

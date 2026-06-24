@@ -14,7 +14,7 @@ abstract class RepositoryModel with _$RepositoryModel {
     @JsonKey(name: 'pushed_at') required DateTime updatedAt,
     @JsonKey(name: 'created_at') required DateTime createdAt,
     @JsonKey(name: 'stargazers_count') required int stars,
-    String? descriptions,
+    String? description,
     String? language,
   }) = _RepositoryModel;
 
